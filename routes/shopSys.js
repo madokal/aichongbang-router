@@ -3,7 +3,7 @@ var router = express.Router();
 const client = require("ykt-http-client");
 client.url("localhost:8080");
 
-//查询所有
+//查询所有门店
 router.get("/", async function(req, res) {
     let {
         page,
@@ -26,42 +26,16 @@ router.get("/", async function(req, res) {
     res.send(data);
 })
 
-//根据ID查询影院
+//根据ID查询门店
 router.get("/:id", async function(req, res) {
     let id = req.params.id;
     let data = await client.get("/stores/" + id);
     res.send(data);
 });
 
-//新增院线
-router.post("/", async function(req, res) {
-    let {
-        name,
-        addr,
-        tel,
-        url,
-    } = req.body;
-    let screen = [];
-    let infos = JSON.parse(req.body.screen);
-    // console.log(infos);
-    for (let i in infos) {
-        infos[i].seat = JSON.parse(infos[i].seat);
-        screen.push({
-            name: infos[i].name,
-            seat: infos[i].seat
-        })
-    }
-    let data = await client.post("/stores", {
-        name,
-        addr,
-        tel,
-        url,
-        screen
-    });
-    res.send(data);
-});
 
-//修改院线
+
+//修改门店
 router.put("/:id", async function(req, res) {
     let {
         name,
