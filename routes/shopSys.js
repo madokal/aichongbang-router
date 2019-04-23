@@ -46,6 +46,20 @@ router.put("/:id", async function (req, res) {
     res.send(data);
 });
 
+//审核门店  状态
+router.put("/auditshop/:id", async function (req, res) {
+    console.log("111")
+    let {
+       storeStatus
+    } = req.body;
+    let id = req.params.id;
+    console.log("storeStatus",storeStatus)
+    let data = await client.put("/stores/" + id, {
+        storeStatus
+    });
+    res.send(data);
+});
+
 // //删除院线
 // router.delete("/:id", async function(req, res) {
 //     let id = req.params.id;
