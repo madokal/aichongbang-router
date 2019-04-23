@@ -3,29 +3,48 @@ var router = express.Router();
 const client = require("ykt-http-client");
 client.url("localhost:8080");
 
+//查询已审核门店
+router.get("/shopsed", async function (req, res) {
+    let data = await client.get("/stores");
+    let newData = [];
+    if (data.length > 0) {
+        for (let i of data) {
+            if (i.storeStatus == 1) {
+                newData.push(i);
+            }
+        }
+    }
+    // console.log(data);
+    res.send(newData);
+})
+//查询未审核门店
+router.get("/noshops", async function (req, res) {
+    let option = {};
+    let data = await client.get("/stores");
+    let newData = [];
+    if (data.length > 0) {
+        for (let i of data) {
+            if (i.storeStatus == 0) {
+                newData.push(i);
+            }
+        }
+    }
+    // console.log(data);
+    res.send(newData);
+})
+
 //查询所有门店
-router.get("/", async function (req, res) {
-    let {
-        page,
-        rows,
-        type,
-        value
-    } = req.query;
-    // console.log("路由",page,rows,type,value)
+router.get("/", async function(req, res) {
+    let { page, rows, type, value } = req.query;
     let option = {};
     if (type && value) {
         option = {
             [type]: value
         }
     }
-    let data = await client.get("/stores", {
-        page,
-        rows,
-        ...option
-    });
-    // console.log(data);
+    let data = await client.get("/stores", { page, rows, ...option });
     res.send(data);
-})
+});
 
 //根据ID查询门店
 router.get("/:id", async function (req, res) {
@@ -53,7 +72,7 @@ router.put("/auditshop/:id", async function (req, res) {
        storeStatus
     } = req.body;
     let id = req.params.id;
-    console.log("storeStatus",storeStatus)
+    console.log("storeStatus", storeStatus)
     let data = await client.put("/stores/" + id, {
         storeStatus
     });
