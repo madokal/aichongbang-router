@@ -5,14 +5,16 @@
  */
 
 var app = require('../app');
-var debug = require('debug')('pet:server');
+var debug = require('debug')('test-react:server');
 var http = require('http');
+var config = require("../package.json");
+
 
 /**
  * Get port from environment and store in Express.
  */
 
-var port = normalizePort(process.env.PORT || '3000');
+var port = normalizePort(process.env.PORT || config.port);
 app.set('port', port);
 
 /**
@@ -87,4 +89,5 @@ function onListening() {
     ? 'pipe ' + addr
     : 'port ' + addr.port;
   debug('Listening on ' + bind);
+  console.log('Listening on ' + bind);
 }
