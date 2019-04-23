@@ -5,8 +5,6 @@ client.url("localhost:8080");
 
 //查询所有
 router.get("/", async function (req, res) {
-
-    console.log("11111111111111111")
     let {
         page,
         rows,
