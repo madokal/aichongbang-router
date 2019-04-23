@@ -4,13 +4,14 @@ const client = require("ykt-http-client");
 client.url("localhost:8080");
 
 //查询所有门店
-router.get("/", async function(req, res) {
+router.get("/", async function (req, res) {
     let {
         page,
         rows,
         type,
         value
-    } = req.query;  
+    } = req.query;
+    // console.log("路由",page,rows,type,value)
     let option = {};
     if (type && value) {
         option = {
@@ -27,38 +28,20 @@ router.get("/", async function(req, res) {
 })
 
 //根据ID查询门店
-router.get("/:id", async function(req, res) {
+router.get("/:id", async function (req, res) {
     let id = req.params.id;
     let data = await client.get("/stores/" + id);
     res.send(data);
 });
 
-
-
-//修改门店
-router.put("/:id", async function(req, res) {
+//修改门店  佣金比例和VIP等级
+router.put("/:id", async function (req, res) {
     let {
-        name,
-        addr,
-        tel,
-        url,
+        VIPlevel, commission
     } = req.body;
-    let screen = [];
-    let infos = JSON.parse(req.body.screen);
-    for (let i in infos) {
-        infos[i].seat = JSON.parse(infos[i].seat);
-        screen.push({
-            name: infos[i].name,
-            seat: infos[i].seat
-        })
-    }
     let id = req.params.id;
     let data = await client.put("/stores/" + id, {
-        name,
-        addr,
-        tel,
-        url,
-        screen
+        VIPlevel, commission
     });
     res.send(data);
 });
