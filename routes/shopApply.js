@@ -1,3 +1,5 @@
+
+
 var express = require('express');
 var router = express.Router();
 const client = require("ykt-http-client");
@@ -23,6 +25,7 @@ router.post("/", async function (req, res) {
         logo,
         id
      } = req.body;
+     console.log(workers)
      console.log(id,'用户ID')
     let data = await client.post("/stores", {
         name,
@@ -37,7 +40,7 @@ router.post("/", async function (req, res) {
         commission,
         permitImage,
         logo,
-        users:{$ref:"users",$id:id.id}
+        users:{$ref:"users",$id:id}
     });
     res.send(data);
 });
