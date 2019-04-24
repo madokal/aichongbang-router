@@ -20,8 +20,10 @@ router.post("/", async function (req, res) {
         VIPlevel,
         commission,
         permitImage,
-        logo
+        logo,
+        id
      } = req.body;
+     console.log(id,'用户ID')
     let data = await client.post("/stores", {
         name,
         permitNum,
@@ -34,7 +36,8 @@ router.post("/", async function (req, res) {
         VIPlevel,
         commission,
         permitImage,
-        logo
+        logo,
+        users:{$ref:"users",$id:id.id}
     });
     res.send(data);
 });
