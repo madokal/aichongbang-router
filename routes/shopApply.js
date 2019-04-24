@@ -19,8 +19,8 @@ router.post("/", async function (req, res) {
         workers,
         VIPlevel,
         commission,
-        cPermitImageUrl,
-        cLogoImageUrl,
+        permitImage,
+        logo
      } = req.body;
     let data = await client.post("/stores", {
         name,
@@ -33,8 +33,8 @@ router.post("/", async function (req, res) {
         workers,
         VIPlevel,
         commission,
-        cPermitImageUrl,
-        cLogoImageUrl,
+        permitImage,
+        logo
     });
     res.send(data);
 });
