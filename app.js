@@ -5,6 +5,7 @@ var cookieParser = require('cookie-parser');
 var logger = require('morgan');
 const session = require('express-session');
 
+
 var loginRouter = require('./routes/login');
 var registerRouter = require('./routes/register');
 var manageRouter = require('./routes/manage');
@@ -39,6 +40,8 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
+
+
 
 //用户登录路由
 app.use('/login', loginRouter);
