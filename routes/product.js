@@ -5,6 +5,7 @@ client.url("localhost:8080");
 const multiparty =require("multiparty");
 const path =require("path")
 
+
 //商品管理
 router.get("/",async function(req,res){
     let {page,rows,type,value} = req.query;
@@ -21,6 +22,7 @@ router.get("/:id",async function(req,res){
     let data = await client.get("/commodities/"+id);
     res.send(data);
 });
+
 
 router.post("/",async function(req,res){
     let {name,commodityType,textureOrMade,size,exclusiveSize,weight,taste,specialFunc,palce,madeDate,shelfLife,supplier,info,price,pictures} = req.body;
@@ -39,6 +41,14 @@ router.delete("/:id",async function(req,res){
     await client.delete("/commodities/"+id);
     res.send({status:1});
 });
+
+router.get("/shop",async function(req,res){
+    let id = req.params.id;
+    // console.log("111")
+   let data= await client.get("/stores",{submitType:"findJoin",ref:"stores","stores.$id":id});
+    res.send(data);
+});
+
 
 router.post("/upload", function (req, res) {
     let form = new multiparty.Form({
