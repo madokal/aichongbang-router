@@ -40,6 +40,7 @@ router.post("/", async function (req, res) {
         addr,
         tel,
         brand,
+        img,
         product,
         time,
         price,
@@ -48,6 +49,7 @@ router.post("/", async function (req, res) {
     let data = await client.post("/providers", {
         name,
         addr,
+        img,
         tel,
         brand,
         product,
@@ -56,6 +58,20 @@ router.post("/", async function (req, res) {
         produce
     });
     res.send(data);
+});
+//营业执照
+router.post("/upload",function(req,res){
+    let form=new multiparty.Form({
+        uploadDir:'./public/upload'
+    });
+    form.parse(req,function(err,fields,files){
+        let key=Object.keys(files)[0];//获取上传信息的key
+        if(err){
+            res.send(err);
+        }else{
+            res.send(path.basename(files[key][0].path))
+        }
+    })
 });
 //修改供应商
 router.put("/:id", async function (req, res) {
