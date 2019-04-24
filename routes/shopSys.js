@@ -46,6 +46,9 @@ router.get("/", async function(req, res) {
     res.send(data);
 });
 
+
+
+
 //根据ID查询门店
 router.get("/:id", async function (req, res) {
     let id = req.params.id;
