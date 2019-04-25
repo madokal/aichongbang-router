@@ -4,11 +4,11 @@ const client = require("ykt-http-client");
 client.url("localhost:8080");
 
 //平台管理员登录
-router.post("/deng", async function(req, res) {
+router.post("/login", async function(req, res) {
     let { tel, pwd } = req.body;
-    let data = await client.get("/users", {tel, pwd,findType:"exact"});
+    let data = await client.get("/users", {tel, pwd});
     console.log(data)
-    if(data[0].role=='平台管理员'){
+    if(data.length&&data[0].role=='平台管理员'){
       req.session.user = data[0];
       res.send({
         status: 1
@@ -21,11 +21,11 @@ router.post("/deng", async function(req, res) {
   });
 
   //店铺管理员登录
-    router.post("/dengs", async function(req, res) {
-        let { tel, pwd } = req.body;
-        let data = await client.get("/users", {tel, pwd,findType:"exact"});
-        console.log(data[0]._id,data[0].userName)
-        if(data[0].role=='店铺管理员'){
+    router.get("/login", async function(req, res) {
+        let { tel, pwd } = req.query;
+        let data = await client.get("/users", {tel, pwd});
+        console.log(data)
+        if(data.length&&data[0].role=='店铺管理员'){
         req.session.user = data[0];
             if(data[0].storeStatus=='未开店'){
                 res.send({
