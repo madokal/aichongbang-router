@@ -55,19 +55,6 @@ router.post("/deng", async function(req, res) {
         }
     });
   
-  
-  
-
-
-
-
-
-
-
-
-
-
-
 
   //获取session
   router.get("/getSession", function(req, res) {

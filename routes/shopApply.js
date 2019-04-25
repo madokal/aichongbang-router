@@ -1,3 +1,5 @@
+
+
 var express = require('express');
 var router = express.Router();
 const client = require("ykt-http-client");
@@ -20,8 +22,12 @@ router.post("/", async function (req, res) {
         VIPlevel,
         commission,
         permitImage,
-        logo
+        logo,
+        id,
+        location
      } = req.body;
+    console.log(location)
+    console.log(id, '用户ID')
     let data = await client.post("/stores", {
         name,
         permitNum,
@@ -34,7 +40,9 @@ router.post("/", async function (req, res) {
         VIPlevel,
         commission,
         permitImage,
-        logo
+        logo,
+        users: { $ref: "users", $id: id },
+        location
     });
     res.send(data);
 });

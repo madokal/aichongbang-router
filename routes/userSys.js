@@ -4,6 +4,7 @@ const client = require("ykt-http-client");
 client.url("localhost:8080");
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 //获取全部数据
 router.get("/", async function(req, res) {
   let { page, rows, type, value } = req.query;
@@ -77,3 +78,24 @@ router.delete("/:id", async function(req, res) {
 
 >>>>>>> tang
 module.exports = router;
+=======
+//用户管理
+router.post("/", async function (req, res) {
+    res.send("wsd")
+});
+
+// 审核/拉黑用户  修改门店状态
+router.put("/:id", async function (req, res) {
+    let id = req.params.id;
+    let storeStatus = req.body.storeStatus
+    // console.log(storeStatus)
+    // console.log(id )
+    let data = await client.put("/users/" + id, {
+        storeStatus
+    });
+    res.send(data);
+});
+
+
+module.exports = router;
+>>>>>>> 180149ca4bff23c3924eaea7db2677a884990980
