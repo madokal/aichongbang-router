@@ -6,30 +6,66 @@ client.url("localhost:8080");
 //店铺城市分布图
 
 // 获取各个城市的店铺数
-router.get("/storeCounts", function(req,res) {
-    const shops = [
-        [120.33, 36.07, 10, "青岛"],
-        [91.11, 29.97, 6, "拉萨"],
-        [121.48, 31.22, 9, "上海"],
-        [114.87, 40.82, 10, "张家口"],
-        [121.56, 29.86, 2, "宁波"],
-        [102.73, 25.04,15, "昆明"],
-        [123.38, 41.8, 7, "沈阳"],
-        [104.06, 30.67, 3, "成都"],
-        [116.46, 39.92, 11, "北京"]
-    ];
+// router.get("/storeCounts", function(req,res) {
+//     const shops = [
+//         [120.33, 36.07, 10, "青岛"],
+//         [91.11, 29.97, 6, "拉萨"],
+//         [121.48, 31.22, 9, "上海"],
+//         [114.87, 40.82, 10, "张家口"],
+//         [121.56, 29.86, 2, "宁波"],
+//         [102.73, 25.04,15, "昆明"],
+//         [123.38, 41.8, 7, "沈阳"],
+//         [104.06, 30.67, 3, "成都"],
+//         [116.46, 39.92, 11, "北京"]
+//     ];
+//     res.send(shops);
+// });
+router.get("/storeCounts", async function(req, res) {
+    let shops = [];
+    let shopSet = new Set();
+    let data = await client.get("/stores");
+    for (let i = 0; i < data.length; i++) {
+      shopSet.add(data[i].city);
+    }
+    let cityArr = [...shopSet];
+  
+    for (let j = 0; j < cityArr.length; j++) {
+      let cityNum = 0;
+      let cityIndex = 0;
+      let cityLongitude = 0;
+      let cityLatitude = 0;
+      for (let i = 0; i < data.length; i++) {
+        if (cityArr[j] == data[i].city) {
+          cityNum++;
+          cityIndex = i;
+        }
+        if (i == data.length - 1) {
+          cityLongitude = parseFloat(data[cityIndex].location.lng);
+          cityLatitude = parseFloat(data[cityIndex].location.lat);
+          shops.push([cityLongitude, cityLatitude, cityNum, cityArr[j]]);
+        }
+      }
+    }
     res.send(shops);
-});
-
-router.get("/oneCityStores",function(req,res){
-    const shops = [
-        [104.062275,30.685623,  "爱心宠物店","成都通锦大厦一楼"],
-        [104.079726,30.64296,  "蠢萌宠物店","四川省成都市武侯区林荫中街8号"],
-        [104.119394,30.672233,  "玲珑宠物店","建设南路1号"],
-        [104.077363,30.600042,  "卡哇伊宠物店","天顺路225号"]
-    ];
+  });
+// router.get("/oneCityStores",function(req,res){
+//     const shops = [
+//         [104.062275,30.685623,  "爱心宠物店","成都通锦大厦一楼"],
+//         [104.079726,30.64296,  "蠢萌宠物店","四川省成都市武侯区林荫中街8号"],
+//         [104.119394,30.672233,  "玲珑宠物店","建设南路1号"],
+//         [104.077363,30.600042,  "卡哇伊宠物店","天顺路225号"]
+//     ];
+//     res.send(shops);
+// });
+router.get("/oneCityStores", async function(req, res) {
+    let shops = [];
+    let data = await client.get("/stores");
+    for (let i = 0; i < data.length; i++) {
+      shops.push([parseFloat(data[i].location.lng),parseFloat(data[i].location.lat),data[i].name,data[i].permitAddr])
+    }
+    console.log("shops",shops)
     res.send(shops);
-});
+  });
 //获取登录商家的Id
 router.get("/getSession", async function(req, res) {
     let userId = req.session.user._id;
