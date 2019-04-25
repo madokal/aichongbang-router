@@ -3,29 +3,37 @@ var router = express.Router();
 const client = require("ykt-http-client");
 client.url("localhost:8080");
 
-//订单管理
+//獲取session保存的數據
+router.get('/getSession', function (req, res) {
+    res.send(req.session.user || {});
+});
 
-//根据类型查订单
 router.get("/", async function (req, res) {
-    let { type, value, allOrders } = req.query;
+    let { page, rows, type, value, status, deal } = req.query;
     let option = {};
     if (type && value) {
         option = { [type]: value }
     }
-    let data = await client.get("/orders", { submitType: "findJoin", ref: ["petOwners", "commodities", "stores", "service"], ...option });
-    let orders = [];
-    data.map((item) => {
-        if (allOrders == "订单") {
-            if (item.status == "完成交易" || item.status == "等待交易") {
-                orders.push(item)
-            }
-        } else {
-            if (item.status == "服务已完成" || item.status == "服务等待中") {
-                orders.push(item)
-            }
-        }
-    })
-    res.send(orders)
+    let data1 = await client.get("/orders", { "status": status, page, rows, submitType: "findJoin", ref: ["petOwners", "commodities", "stores", "service"], ...option });
+    let data2 = await client.get("/orders", { "deal": deal, page, rows, submitType: "findJoin", ref: ["petOwners", "commodities", "stores", "service"], ...option });
+    if (status) {
+        res.send(data1)
+    } else if (deal) {
+        res.send(data2)
+    } else {
+        res.send(data1)
+    }
+
+})
+//根据类型获取所有订单
+router.get("/deal", async function (req, res) {
+    let { type, value, deal } = req.query;
+    let option = {};
+    if (type && value) {
+        option = { [type]: value }
+    }
+    let data = await client.get("/orders", { "deal": deal, submitType: "findJoin", ref: ["petOwners", "commodities", "stores", "service"], ...option });
+    res.send(data)
 })
 //根据状态查订单
 router.get("/orders", async function (req, res) {
@@ -99,7 +107,12 @@ router.get("/serves", async function (req, res) {
     let seriesData = [{ name: "春季", value: 0 }, { name: "夏季", value: 0 }, { name: "秋季", value: 0 }, { name: "冬季", value: 0 }];
     array.forEach(function (item) {
         let date = parseInt((item.date).match(reg)[2]);
+<<<<<<< HEAD
+
+        console.log(typeof date, "item", date)
+=======
         // console.log(typeof date,"item",date)
+>>>>>>> 2c61efb4f2f45422c17c9187784140fb373cb77e
         if (date <= 3 & date >= 1) {
             seriesData[0].value++;
         }
