@@ -5,10 +5,10 @@ client.url("localhost:8080");
 
 //统计
 router.get("/citySale", async function (req, res) {
-    // let status = req.query.status;
-    let status = "完成交易";
+    let status = req.query.status;
+    // let status = "完成交易";
     let data = await client.get("/orders", {submitType: "findJoin", ref: ["petOwners", "commodities", "stores", "service"] });
-    console.log(data[0],"完成交易")
+    // console.log(data[0],"完成交易")
     let date = '2019/5/5';
     let reg = /^(\d{4})\/(\d{1,2})\/(\d{1,2})$/;
     let array = [];
@@ -23,17 +23,15 @@ router.get("/citySale", async function (req, res) {
     })
     // console.log(cityArr,10)
      cityArr =[...new Set(cityArr)];
-    console.log(cityArr,"cityArr");
+    // console.log(cityArr,"cityArr");
     // console.log(date.match(reg)[2],"月份")
-    // let stores = await client.get("/stores", { "storeStatus":"1"});
-    // console.log("店铺",stores)
     
     let axisData = cityArr;
     let seriesData = [];
     axisData.map((item)=>{
         seriesData.push({name:item,value:0})
     })
-    console.log(seriesData,99)
+    // console.log(seriesData,99)
     array.forEach(function (item) {
         // let date = parseInt((item.date).match(reg)[2]);
         // console.log(typeof date, "item", date)
