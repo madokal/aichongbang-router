@@ -27,8 +27,8 @@ router.post("/", async function (req, res) {
         location,
         city
      } = req.body;
-    console.log(city)
-    console.log(id, '用户ID')
+    // console.log(city)
+    // console.log(id, '用户ID')
     let data = await client.post("/stores", {
         name,
         permitNum,
@@ -68,7 +68,7 @@ router.post("/upload", function (req, res) {
 router.put("/:id", async function (req, res) {
     let id = req.params.id;
     let storeStatus = req.body.storeStatus
-    console.log("用户状态",storeStatus)
+    // console.log("用户状态",storeStatus)
     // console.log(storeStatus)
     // console.log(id )
     let data = await client.put("/users/" + id, {
