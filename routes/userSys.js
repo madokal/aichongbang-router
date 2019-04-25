@@ -55,12 +55,6 @@ router.get("/:id", async function(req, res) {
   res.send(data);
 });
 
-//删除店铺管理员
-router.delete("/:id", async function(req, res) {
-  let id = req.params.id;
-  let data = await client.delete("/users/" + id);
-  res.send(data);
-});
 
 //用户管理
 router.post("/", async function (req, res) {
@@ -69,15 +63,16 @@ router.post("/", async function (req, res) {
 
 // 审核/拉黑用户  修改门店状态
 router.put("/:id", async function (req, res) {
-    let id = req.params.id;
-    let storeStatus = req.body.storeStatus
-    // console.log(storeStatus)
-    // console.log(id )
-    let data = await client.put("/users/" + id, {
-        storeStatus
-    });
-    res.send(data);
+  let id = req.params.id;
+  let storeStatus = req.body.storeStatus
+  // console.log(storeStatus)
+  // console.log(id )
+  let data = await client.put("/users/" + id, {
+      storeStatus
+  });
+  res.send(data);
 });
 
 
 module.exports = router;
+
