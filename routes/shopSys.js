@@ -5,32 +5,56 @@ client.url("localhost:8080");
 
 //统计
 router.get("/citySale", async function (req, res) {
-    // let status = req.query.status;
-    let data = await client.get("/orders", { "status": "完成交易" });
-    // console.log(data,"完成交易")
+    let status = req.query.status;
+    // let status = "完成交易";
+    let data = await client.get("/orders", {submitType: "findJoin", ref: ["petOwners", "commodities", "stores", "service"] });
+    // console.log(data[0],"完成交易")
     let date = '2019/5/5';
     let reg = /^(\d{4})\/(\d{1,2})\/(\d{1,2})$/;
+    let array = [];
+    let cityArr = [];
+    data.map((item)=>{
+        console.log(item.status)
+        if(status==item.status){
+            console.log(item.stores.city,"city")
+            array.push(item);
+            cityArr.push(item.stores.city)
+        }
+    })
+    // console.log(cityArr,10)
+     cityArr =[...new Set(cityArr)];
+    // console.log(cityArr,"cityArr");
     // console.log(date.match(reg)[2],"月份")
-    let data1 = await client.get("/orders", { submitType: "findJoin", ref: ["petOwners"] });
-    console.log(data1,"数据11")
-    // let axisData = ["春季", "夏季", "秋季", "冬季"];
-    // let seriesData = [{ name: "春季", value: 0 }, { name: "夏季", value: 0 }, { name: "秋季", value: 0 }, { name: "冬季", value: 0 }];
-    // array.forEach(function (item) {
-    //     let date = parseInt((item.date).match(reg)[2]);
-    //     console.log(typeof date, "item", date)
-    //     if (date <= 3 & date >= 1) {
-    //         seriesData[0].value++;
-    //     }
-    //     else if (date <= 6 & date >= 4) {
-    //         seriesData[1].value++;
-    //     }
-    //     else if (date <= 9 & date >= 7) {
-    //         seriesData[2].value++;
-    //     } else {
-    //         seriesData[3].value++;
-    //     }
-    // });
-    // res.send({ axisData, seriesData });
+    
+    let axisData = cityArr;
+    let seriesData = [];
+    axisData.map((item)=>{
+        seriesData.push({name:item,value:0})
+    })
+    // console.log(seriesData,99)
+    array.forEach(function (item) {
+        // let date = parseInt((item.date).match(reg)[2]);
+        // console.log(typeof date, "item", date)
+        seriesData.map((i,index)=>{
+            console.log(i,index,"i,cs")
+            if(item.stores.city==i.name){
+                i.value+=parseInt(item.totalPrice);
+            }
+        })
+        // if (date <= 3 & date >= 1) {
+        //     seriesData[0].value++;
+        // }
+        // else if (date <= 6 & date >= 4) {
+        //     seriesData[1].value++;
+        // }
+        // else if (date <= 9 & date >= 7) {
+        //     seriesData[2].value++;
+        // } else {
+        //     seriesData[3].value++;
+        // }
+    });
+    // console.log(axisData,seriesData,"oooo")
+    res.send({ axisData, seriesData });
 })
 
 

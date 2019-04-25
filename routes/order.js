@@ -78,10 +78,13 @@ router.put("/user/:id", async function (req, res) {
     let data1 = await client.put("/orders/" + id, data);
     res.send(data)
 })
+
+
 //统计
 router.get("/serves", async function (req, res) {
     let status = req.query.status;
     let data = await client.get("/orders");
+    console.log(data)
     let array = [];
     data.map((item) => {
         if (status == item.status) {
@@ -91,12 +94,12 @@ router.get("/serves", async function (req, res) {
     // console.log(array,"array")
     let date = '2019/4/5';
     let reg = /^(\d{4})\/(\d{1,2})\/(\d{1,2})$/;
-    console.log(date.match(reg)[2])
+    // console.log(date.match(reg)[2])
     let axisData = ["春季", "夏季", "秋季", "冬季"];
     let seriesData = [{ name: "春季", value: 0 }, { name: "夏季", value: 0 }, { name: "秋季", value: 0 }, { name: "冬季", value: 0 }];
     array.forEach(function (item) {
         let date = parseInt((item.date).match(reg)[2]);
-        console.log(typeof date,"item",date)
+        // console.log(typeof date,"item",date)
         if (date <= 3 & date >= 1) {
             seriesData[0].value++;
         }

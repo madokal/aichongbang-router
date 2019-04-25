@@ -5,10 +5,51 @@ client.url("localhost:8080");
 const multiparty = require("multiparty");
 const path = require("path");
 
+
+//统计各个店铺的销售
+router.get("/sell", async function(req, res) {
+  let status = req.query.sell;
+  let data = await client.get("/orders", {"status":"完成交易",
+    submitType: "findJoin",
+    ref: ["petOwners", "commodities", "stores", "service"]
+  });
+  // console.log(data);
+  let array = [];
+  data.map(item => {
+    if (status == item.status) {
+      array.push(item);
+    }
+  });
+  let date = "2019/4/5";
+  let reg = /^(\d{4})\/(\d{1,2})\/(\d{1,2})$/;
+  let axisData = ["春季", "夏季", "秋季", "冬季"];
+  let seriesData = [
+    { name: "春季", value: 0 },
+    { name: "夏季", value: 0 },
+    { name: "秋季", value: 0 },
+    { name: "冬季", value: 0 }
+  ];
+  array.forEach(function(item) {
+    let date = parseInt(item.date.match(reg)[2]);
+    if ((date <= 3) & (date >= 1)) {
+      seriesData[0].value += parseInt(item.counts);
+    } else if ((date <= 6) & (date >= 4)) {
+      seriesData[1].value += parseInt(item.counts);
+    } else if ((date <= 9) & (date >= 7)) {
+      seriesData[2].value += parseInt(item.counts);
+    } else {
+      seriesData[3].value += parseInt(item.counts);
+    }
+  });
+  res.send({ axisData, seriesData });
+});
+
+
+
 //商品管理
 router.get("/shop", async function(req, res) {
   let id = req.query.id;
-  console.log(id);
+  // console.log(id);
   let data = await client.get("/stores", {
     "users.$id": id,
     submitType: "findJoin",
@@ -16,6 +57,9 @@ router.get("/shop", async function(req, res) {
   });
   res.send(data);
 });
+
+
+
 router.get("/", async function(req, res) {
   let { page, rows, type, value } = req.query;
   let searchObj = {};
@@ -26,11 +70,17 @@ router.get("/", async function(req, res) {
   res.send(data);
 });
 
+
+
+
 router.get("/:id", async function(req, res) {
   let id = req.params.id;
   let data = await client.get("/commodities/" + id);
   res.send(data);
 });
+
+
+
 
 router.post("/", async function(req, res) {
   let {
@@ -51,7 +101,7 @@ router.post("/", async function(req, res) {
     pictures,
     id
   } = req.body;
-//   console.log(id);
+  //   console.log(id);
   let data = await client.post("/commodities", {
     name,
     commodityType,
@@ -68,10 +118,12 @@ router.post("/", async function(req, res) {
     info,
     price,
     pictures,
-    stores:{$ref:"stores",$id:id}
+    stores: { $ref: "stores", $id: id }
   });
   res.send(data);
 });
+
+
 
 router.put("/:id", async function(req, res) {
   let id = req.params.id;
