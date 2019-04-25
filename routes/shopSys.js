@@ -3,6 +3,37 @@ var router = express.Router();
 const client = require("ykt-http-client");
 client.url("localhost:8080");
 
+//统计
+router.get("/citySale", async function (req, res) {
+    // let status = req.query.status;
+    let data = await client.get("/orders", { "status": "完成交易" });
+    // console.log(data,"完成交易")
+    let date = '2019/5/5';
+    let reg = /^(\d{4})\/(\d{1,2})\/(\d{1,2})$/;
+    // console.log(date.match(reg)[2],"月份")
+    let data1 = await client.get("/orders", { submitType: "findJoin", ref: ["petOwners"] });
+    console.log(data1,"数据11")
+    // let axisData = ["春季", "夏季", "秋季", "冬季"];
+    // let seriesData = [{ name: "春季", value: 0 }, { name: "夏季", value: 0 }, { name: "秋季", value: 0 }, { name: "冬季", value: 0 }];
+    // array.forEach(function (item) {
+    //     let date = parseInt((item.date).match(reg)[2]);
+    //     console.log(typeof date, "item", date)
+    //     if (date <= 3 & date >= 1) {
+    //         seriesData[0].value++;
+    //     }
+    //     else if (date <= 6 & date >= 4) {
+    //         seriesData[1].value++;
+    //     }
+    //     else if (date <= 9 & date >= 7) {
+    //         seriesData[2].value++;
+    //     } else {
+    //         seriesData[3].value++;
+    //     }
+    // });
+    // res.send({ axisData, seriesData });
+})
+
+
 //查询已审核门店
 router.get("/shopsed", async function (req, res) {
     let data = await client.get("/stores");
@@ -32,9 +63,23 @@ router.get("/noshops", async function (req, res) {
     // console.log(data);
     res.send(newData);
 })
-
+//查询已关闭门店
+router.get("/closeshops", async function (req, res) {
+    let option = {};
+    let data = await client.get("/stores");
+    let newData = [];
+    if (data.length > 0) {
+        for (let i of data) {
+            if (i.storeStatus == 2) {
+                newData.push(i);
+            }
+        }
+    }
+    // console.log(data);
+    res.send(newData);
+})
 //查询所有门店
-router.get("/", async function(req, res) {
+router.get("/", async function (req, res) {
     let { page, rows, type, value } = req.query;
     let option = {};
     if (type && value) {
@@ -45,8 +90,6 @@ router.get("/", async function(req, res) {
     let data = await client.get("/stores", { page, rows, ...option });
     res.send(data);
 });
-
-
 
 
 //根据ID查询门店
@@ -70,29 +113,17 @@ router.put("/:id", async function (req, res) {
 
 //审核门店  状态
 router.put("/auditshop/:id", async function (req, res) {
-    console.log("111")
+    // console.log("111")
     let {
        storeStatus
     } = req.body;
     let id = req.params.id;
-    console.log("storeStatus", storeStatus)
+    // console.log("storeStatus", storeStatus)
     let data = await client.put("/stores/" + id, {
         storeStatus
     });
     res.send(data);
 });
 
-// //删除院线
-// router.delete("/:id", async function(req, res) {
-//     let id = req.params.id;
-//     let data1 = await client.get("/filmAndCinemas", { submitType: "findJoin", ref: ["cinemas", "films"] });
-//     for (let i = 0; i < data1.length; i++) {
-//         if (data1[i].cinemas._id == id) {
-//             await client.delete("/filmAndCinemas/" + data1[i]._id);
-//         }
-//     }
-//     let data = await client.delete('/cinemas/' + id);
-//     res.send(data);
-// });
 
 module.exports = router;
