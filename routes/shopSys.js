@@ -3,6 +3,61 @@ var router = express.Router();
 const client = require("ykt-http-client");
 client.url("localhost:8080");
 
+//统计
+router.get("/citySale", async function (req, res) {
+    let status = req.query.status;
+    // let status = "完成交易";
+    let data = await client.get("/orders", {submitType: "findJoin", ref: ["petOwners", "commodities", "stores", "service"] });
+    // console.log(data[0],"完成交易")
+    let date = '2019/5/5';
+    let reg = /^(\d{4})\/(\d{1,2})\/(\d{1,2})$/;
+    let array = [];
+    let cityArr = [];
+    data.map((item)=>{
+        console.log(item.status)
+        if(status==item.status){
+            console.log(item.stores.city,"city")
+            array.push(item);
+            cityArr.push(item.stores.city)
+        }
+    })
+    // console.log(cityArr,10)
+     cityArr =[...new Set(cityArr)];
+    // console.log(cityArr,"cityArr");
+    // console.log(date.match(reg)[2],"月份")
+    
+    let axisData = cityArr;
+    let seriesData = [];
+    axisData.map((item)=>{
+        seriesData.push({name:item,value:0})
+    })
+    // console.log(seriesData,99)
+    array.forEach(function (item) {
+        // let date = parseInt((item.date).match(reg)[2]);
+        // console.log(typeof date, "item", date)
+        seriesData.map((i,index)=>{
+            console.log(i,index,"i,cs")
+            if(item.stores.city==i.name){
+                i.value+=parseInt(item.totalPrice);
+            }
+        })
+        // if (date <= 3 & date >= 1) {
+        //     seriesData[0].value++;
+        // }
+        // else if (date <= 6 & date >= 4) {
+        //     seriesData[1].value++;
+        // }
+        // else if (date <= 9 & date >= 7) {
+        //     seriesData[2].value++;
+        // } else {
+        //     seriesData[3].value++;
+        // }
+    });
+    // console.log(axisData,seriesData,"oooo")
+    res.send({ axisData, seriesData });
+})
+
+
 //查询已审核门店
 router.get("/shopsed", async function (req, res) {
     let data = await client.get("/stores");
@@ -82,29 +137,17 @@ router.put("/:id", async function (req, res) {
 
 //审核门店  状态
 router.put("/auditshop/:id", async function (req, res) {
-    console.log("111")
+    // console.log("111")
     let {
        storeStatus
     } = req.body;
     let id = req.params.id;
-    console.log("storeStatus", storeStatus)
+    // console.log("storeStatus", storeStatus)
     let data = await client.put("/stores/" + id, {
         storeStatus
     });
     res.send(data);
 });
 
-// //删除院线
-// router.delete("/:id", async function(req, res) {
-//     let id = req.params.id;
-//     let data1 = await client.get("/filmAndCinemas", { submitType: "findJoin", ref: ["cinemas", "films"] });
-//     for (let i = 0; i < data1.length; i++) {
-//         if (data1[i].cinemas._id == id) {
-//             await client.delete("/filmAndCinemas/" + data1[i]._id);
-//         }
-//     }
-//     let data = await client.delete('/cinemas/' + id);
-//     res.send(data);
-// });
 
 module.exports = router;
