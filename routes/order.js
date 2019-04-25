@@ -84,6 +84,7 @@ router.put("/user/:id", async function (req, res) {
 router.get("/serves", async function (req, res) {
     let status = req.query.status;
     let data = await client.get("/orders");
+    console.log(data)
     let array = [];
     data.map((item) => {
         if (status == item.status) {
