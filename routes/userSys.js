@@ -2,16 +2,6 @@ var express = require("express");
 var router = express.Router();
 const client = require("ykt-http-client");
 client.url("localhost:8080");
-//获取全部数据
-// router.get("/", async function(req, res) {
-//   let { page, rows, type, value } = req.query;
-//   let option = {};
-//   if (type && value) {
-//     option = { [type]: value };
-//   }
-//   let data = await client.get("/users", { page, rows, ...option });
-//   res.send(data);
-// });
 
 //增加一条平台管理员数据
 router.post("/", async function(req, res) {
