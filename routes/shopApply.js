@@ -24,9 +24,10 @@ router.post("/", async function (req, res) {
         permitImage,
         logo,
         id,
-        location
+        location,
+        city
      } = req.body;
-    console.log(location)
+    console.log(city)
     console.log(id, '用户ID')
     let data = await client.post("/stores", {
         name,
@@ -42,7 +43,8 @@ router.post("/", async function (req, res) {
         permitImage,
         logo,
         users: { $ref: "users", $id: id },
-        location
+        location,
+        city
     });
     res.send(data);
 });
