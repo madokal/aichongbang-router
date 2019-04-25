@@ -3,7 +3,6 @@ var router = express.Router();
 const client = require("ykt-http-client");
 client.url("localhost:8080");
 
-
 //增加一条平台管理员数据
 router.post("/", async function(req, res) {
   let { tel, pwd, name } = req.body;
@@ -57,6 +56,10 @@ router.get("/:id", async function(req, res) {
 });
 
 
+//用户管理
+router.post("/", async function (req, res) {
+    res.send("wsd")
+});
 
 // 审核/拉黑用户  修改门店状态
 router.put("/:id", async function (req, res) {
