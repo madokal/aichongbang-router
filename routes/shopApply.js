@@ -24,9 +24,10 @@ router.post("/", async function (req, res) {
         permitImage,
         logo,
         id,
-        location
+        location,
+        city
      } = req.body;
-    console.log(location)
+    console.log(city)
     console.log(id, '用户ID')
     let data = await client.post("/stores", {
         name,
@@ -42,7 +43,8 @@ router.post("/", async function (req, res) {
         permitImage,
         logo,
         users: { $ref: "users", $id: id },
-        location
+        location,
+        city
     });
     res.send(data);
 });
@@ -61,4 +63,17 @@ router.post("/upload", function (req, res) {
     });
 });
 
+
+// 审核/拉黑用户  修改门店状态
+router.put("/:id", async function (req, res) {
+    let id = req.params.id;
+    let storeStatus = req.body.storeStatus
+    console.log("用户状态",storeStatus)
+    // console.log(storeStatus)
+    // console.log(id )
+    let data = await client.put("/users/" + id, {
+        storeStatus
+    });
+    res.send(data);
+  });
 module.exports = router;
