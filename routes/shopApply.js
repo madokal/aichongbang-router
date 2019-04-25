@@ -63,4 +63,17 @@ router.post("/upload", function (req, res) {
     });
 });
 
+
+// 审核/拉黑用户  修改门店状态
+router.put("/:id", async function (req, res) {
+    let id = req.params.id;
+    let storeStatus = req.body.storeStatus
+    console.log("用户状态",storeStatus)
+    // console.log(storeStatus)
+    // console.log(id )
+    let data = await client.put("/users/" + id, {
+        storeStatus
+    });
+    res.send(data);
+  });
 module.exports = router;
