@@ -30,7 +30,13 @@ router.get("/oneCityStores",function(req,res){
     ];
     res.send(shops);
 });
-
+//获取登录商家的Id
+router.get("/getSession", async function(req, res) {
+    let userId = req.session.user._id;
+    let data =await client.get("/stores",{"users.$id": userId,submitType: "findJoin", ref: ["users"]});
+    let storeId=data[0]._id;
+    res.send(storeId || "");
+  });
 //获取所有服务
 router.get("/", async function (req, res) {
     let { page, rows, type, value, storeId } = req.query;
