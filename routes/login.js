@@ -24,7 +24,7 @@ router.post("/login", async function(req, res) {
     router.get("/login", async function(req, res) {
         let { tel, pwd } = req.query;
         let data = await client.get("/users", {tel, pwd});
-        console.log(data)
+        // console.log(data)
         if(data.length&&data[0].role=='店铺管理员'){
         req.session.user = data[0];
             if(data[0].storeStatus=='未开店'){
