@@ -29,7 +29,7 @@ router.post("/", async function (req, res) {
         city
      } = req.body;
     // console.log(city)
-    // console.log(id, '用户ID')
+    console.log(typeof(storeStatus), storeStatus)
     let data = await client.post("/stores", {
         name,
         permitNum,

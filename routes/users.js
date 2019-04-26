@@ -3,6 +3,39 @@ var router = express.Router();
 const client = require("ykt-http-client");
 client.url("localhost:8080");
 
+//服务销售统计图路由
+
+router.get("/serve", async function(req, res) {
+  let data = await client.get("/orders", {"status":"完成交易",submitType: "findJoin", ref: ["service"] });
+  let num = [];   //类型
+  let qian =[];
+  data.map((item)=>{
+        num.push(item.service.name) ;     //push完成的订单类型 
+  })
+    num =[...new Set(num)];   //去重的类型
+  
+    num.map((item)=>{
+        qian.push({name:item,value:0});
+    })
+    
+  
+    data.map((item)=>{
+      qian.map((i,index)=>{
+        if(item.service.name==i.name){
+          i.value+=parseInt(data[index].service.price)
+        }
+      })
+    })
+    console.log(num,qian)
+res.send({num,qian})
+  
+});
+
+
+
+
+
+
 //获取全部数据
 
 router.get("/", async function(req, res) {
