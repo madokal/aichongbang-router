@@ -114,13 +114,7 @@ router.get("/serves", async function (req, res) {
     let seriesData = [{ name: "春季", value: 0 }, { name: "夏季", value: 0 }, { name: "秋季", value: 0 }, { name: "冬季", value: 0 }];
     array.forEach(function (item) {
         let date = parseInt((item.date).match(reg)[2]);
-<<<<<<< HEAD
-
-        console.log(typeof date, "item", date)
-
-=======
         // console.log(typeof date,"item",date)
->>>>>>> 3eeac6d97f17b46242fed5d486bccfda4f8f99bb
         if (date <= 3 & date >= 1) {
             seriesData[0].value++;
         }
