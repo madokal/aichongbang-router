@@ -18,6 +18,7 @@ var shopManageRouter = require('./routes/shopManage');
 var shopSysRouter = require('./routes/shopSys');
 var supplierRouter = require('./routes/supplier');
 var userSysRouter = require('./routes/userSys');
+var usersRouter = require('./routes/users');
 var app = express();
 // view engine setup
 //配置session
@@ -48,6 +49,8 @@ app.use('/login', loginRouter);
 app.use('/register', registerRouter);
 //用户管理
 app.use('/userSys', userSysRouter);
+//平台管理
+app.use('/users', usersRouter);
 //系统管理路由
 app.use('/manage', manageRouter);
 //订单管理路由
