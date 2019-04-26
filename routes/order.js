@@ -8,14 +8,21 @@ router.get('/getSession', function (req, res) {
     res.send(req.session.user || {});
 });
 
+//根据用户id查店铺
+router.post("/:id", async function (req, res) {
+    let id = req.body.id;
+    let data = await client.get("/stores", { "users.$id": id, submitType: "findJoin", ref: "users" });
+    res.send(data)
+})
+
 router.get("/", async function (req, res) {
-    let { page, rows, type, value, status, deal } = req.query;
+    let { page, rows, type, value, status, deal, storeId } = req.query;
     let option = {};
     if (type && value) {
         option = { [type]: value }
     }
-    let data1 = await client.get("/orders", { "status": status, page, rows, submitType: "findJoin", ref: ["petOwners", "commodities", "stores", "service"], ...option });
-    let data2 = await client.get("/orders", { "deal": deal, page, rows, submitType: "findJoin", ref: ["petOwners", "commodities", "stores", "service"], ...option });
+    let data1 = await client.get("/orders", { "stores.$id": storeId, "status": status, page, rows, submitType: "findJoin", ref: ["petOwners", "commodities", "stores", "service"], ...option });
+    let data2 = await client.get("/orders", { "stores.$id": storeId, "deal": deal, page, rows, submitType: "findJoin", ref: ["petOwners", "commodities", "stores", "service"], ...option });
     if (status) {
         res.send(data1)
     } else if (deal) {
@@ -107,12 +114,9 @@ router.get("/serves", async function (req, res) {
     let seriesData = [{ name: "春季", value: 0 }, { name: "夏季", value: 0 }, { name: "秋季", value: 0 }, { name: "冬季", value: 0 }];
     array.forEach(function (item) {
         let date = parseInt((item.date).match(reg)[2]);
-<<<<<<< HEAD
 
         console.log(typeof date, "item", date)
-=======
-        // console.log(typeof date,"item",date)
->>>>>>> 2c61efb4f2f45422c17c9187784140fb373cb77e
+
         if (date <= 3 & date >= 1) {
             seriesData[0].value++;
         }
