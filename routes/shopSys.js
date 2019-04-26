@@ -108,7 +108,7 @@ router.get("/shopsed", async function (req, res) {
     let newData = [];
     if (data.length > 0) {
         for (let i of data) {
-            if (i.storeStatus == 1) {
+            if (i.storeStatus == "1") {
                 newData.push(i);
             }
         }
@@ -123,7 +123,7 @@ router.get("/noshops", async function (req, res) {
     let newData = [];
     if (data.length > 0) {
         for (let i of data) {
-            if (i.storeStatus == 0) {
+            if (i.storeStatus == "0") {
                 newData.push(i);
             }
         }
@@ -138,7 +138,7 @@ router.get("/closeshops", async function (req, res) {
     let newData = [];
     if (data.length > 0) {
         for (let i of data) {
-            if (i.storeStatus == 2) {
+            if (i.storeStatus == "2") {
                 newData.push(i);
             }
         }
