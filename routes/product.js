@@ -47,6 +47,7 @@ router.get("/sell", async function(req, res) {
 
 
 //商品管理
+
 router.get("/shop", async function(req, res) {
   let id = req.query.id;
   // console.log(id);
@@ -60,13 +61,15 @@ router.get("/shop", async function(req, res) {
 
 
 
-router.get("/", async function(req, res) {
+router.get("/:id", async function(req, res) {
+  let shopId=req.params.id
+  // console.log(shopId)
   let { page, rows, type, value } = req.query;
   let searchObj = {};
   if (type) {
     searchObj = { [type]: value };
   }
-  let data = await client.get("/commodities", { page, rows, ...searchObj });
+  let data = await client.get("/commodities", {"stores.$id":shopId,submitType:"findJoin",ref:"stores", page, rows, ...searchObj });
   res.send(data);
 });
 
