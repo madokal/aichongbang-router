@@ -23,7 +23,8 @@ client.url("localhost:8080");
 router.get("/storeCounts", async function(req, res) {
     let shops = [];
     let shopSet = new Set();
-    let data = await client.get("/stores");
+    let data = await client.get("/stores",{"storeStatus":"1"});
+    console.log(data);
     for (let i = 0; i < data.length; i++) {
       shopSet.add(data[i].city);
     }
@@ -59,7 +60,7 @@ router.get("/storeCounts", async function(req, res) {
 // });
 router.get("/oneCityStores", async function(req, res) {
     let shops = [];
-    let data = await client.get("/stores");
+    let data = await client.get("/stores",{"storeStatus":"1"});
     for (let i = 0; i < data.length; i++) {
       shops.push([parseFloat(data[i].location.lng),parseFloat(data[i].location.lat),data[i].name,data[i].permitAddr])
     }
