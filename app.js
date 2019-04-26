@@ -18,7 +18,6 @@ var shopManageRouter = require('./routes/shopManage');
 var shopSysRouter = require('./routes/shopSys');
 var supplierRouter = require('./routes/supplier');
 var userSysRouter = require('./routes/userSys');
-
 var app = express();
 // view engine setup
 //配置session
