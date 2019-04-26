@@ -9,6 +9,7 @@ const multiparty = require("multiparty");
 const path = require("path")
 
 //门店申请
+
 //新增门店
 router.post("/", async function (req, res) {
     let { name,
@@ -27,8 +28,8 @@ router.post("/", async function (req, res) {
         location,
         city
      } = req.body;
-    console.log(city)
-    console.log(id, '用户ID')
+    // console.log(city)
+    console.log(typeof(storeStatus), storeStatus)
     let data = await client.post("/stores", {
         name,
         permitNum,
@@ -63,4 +64,17 @@ router.post("/upload", function (req, res) {
     });
 });
 
+
+// 审核/拉黑用户  修改门店状态
+router.put("/users/:id", async function (req, res) {
+    let id = req.params.id;
+    let storeStatus = req.body.storeStatus
+    // console.log("用户状态",storeStatus)
+    // console.log(storeStatus)
+    // console.log(id )
+    let data = await client.put("/users/" + id, {
+        storeStatus
+    });
+    res.send(data);
+});
 module.exports = router;
