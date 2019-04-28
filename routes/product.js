@@ -15,7 +15,7 @@ router.get("/", async function(req, res) {
   let data = await client.get("/commodities", { page, rows, ...searchObj });
   res.send(data);
 });
-
+ 
 //统计各个店铺的销售
 router.get("/sell", async function(req, res) {
   let status = req.query.sell;
