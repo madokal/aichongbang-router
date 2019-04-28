@@ -8,6 +8,12 @@ router.get('/getSession', function (req, res) {
     res.send(req.session.user || {});
 });
 
+router.get("/waitting", async function (req, res) {
+    let status = req.body.status;
+    let data = await client.get("/orders", { "status":"服务进行中" });
+    res.send(data)
+})
+
 //根据用户id查店铺
 router.post("/:id", async function (req, res) {
     let id = req.body.id;
@@ -72,12 +78,13 @@ router.delete("/:id", async function (req, res) {
 })
 //修改
 router.put("/:id", async function (req, res) {
-    let id = req.body.id;
-    let orderStatus = req.body.status;
+    let {id,status} = req.body;
     let data = await client.get("/orders/" + id);
-    if (orderStatus.indexOf("交易") > -1) {
-        data.status = "完成交易";
-    } else {
+    if(status=="未发货"){
+        data.status = "已发货";
+    }else if(status=="服务已预约"){
+        data.status = "服务进行中";
+    }else{
         data.status = "服务已完成";
     }
     delete data._id;
