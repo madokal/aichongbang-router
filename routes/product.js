@@ -6,7 +6,6 @@ const multiparty = require("multiparty");
 const path = require("path");
 
 
-
 //统计各个店铺的销售
 router.get("/sell", async function(req, res) {
   let status = req.query.sell;
@@ -51,7 +50,7 @@ router.get("/sell", async function(req, res) {
 
 router.get("/shop", async function(req, res) {
   let id = req.query.id;
-  
+  // console.log(id);
   let data = await client.get("/stores", {
     "users.$id": id,
     submitType: "findJoin",
@@ -86,10 +85,7 @@ router.get("/:id", async function(req, res) {
 
 
 
-
-
 router.post("/", async function(req, res) {
-  
   let {
     name,
     commodityType,
@@ -108,7 +104,7 @@ router.post("/", async function(req, res) {
     pictures,
     id
   } = req.body;
-  
+  //   console.log(id);
   let data = await client.post("/commodities", {
     name,
     commodityType,
@@ -170,13 +166,11 @@ router.put("/:id", async function(req, res) {
   });
   res.send({ status: 1 });
 });
-
 router.delete("/:id", async function(req, res) {
   let id = req.params.id;
   await client.delete("/commodities/" + id);
   res.send({ status: 1 });
 });
-
 
 router.post("/upload", function(req, res) {
   let form = new multiparty.Form({
