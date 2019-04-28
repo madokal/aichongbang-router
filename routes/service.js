@@ -76,6 +76,7 @@ router.get("/getSession", async function(req, res) {
   });
 //获取所有服务
 router.get("/", async function (req, res) {
+    console.log("get:/")
     let { page, rows, type, value, storeId } = req.query;
     let searchObj = {};
     if (type && value) {
@@ -156,6 +157,7 @@ router.delete("/:id", async function (req, res) {
 });
 //根据id查询服务
 router.get("/:id", async function (req, res) {
+    console.log("get:id")
     let id = req.params.id;
     let data = await client.get("/service/" + id, { submitType: "findJoin", ref: ["serviceType"], });
     res.send(data);
