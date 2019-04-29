@@ -6,6 +6,18 @@ const multiparty = require("multiparty");
 const path = require("path");
 
 
+//获取所有商品
+router.get("/", async function(req, res) {
+  let { page, rows, type, value } = req.query;
+  let searchObj = {};
+  if (type) {
+    searchObj = { [type]: value };
+  }
+  let data = await client.get("/commodities", { page, rows, ...searchObj });
+  res.send(data);
+
+});
+
 //统计各个店铺的销售
 router.get("/sell", async function(req, res) {
   let status = req.query.sell;
@@ -46,8 +58,7 @@ router.get("/sell", async function(req, res) {
 
 
 
-//商品管理
-
+//关联商店
 router.get("/shop", async function(req, res) {
   let id = req.query.id;
   // console.log(id);
@@ -61,6 +72,7 @@ router.get("/shop", async function(req, res) {
 
 
 
+//获取商品Id
 router.get("/:id", async function(req, res) {
   let shopId=req.params.id
   // console.log(shopId)
@@ -75,8 +87,8 @@ router.get("/:id", async function(req, res) {
 
 
 
-
-router.get("/:id", async function(req, res) {
+//根据Id查询
+router.get("/oneproduct/:id", async function(req, res) {
   let id = req.params.id;
   let data = await client.get("/commodities/" + id);
   res.send(data);
@@ -84,7 +96,7 @@ router.get("/:id", async function(req, res) {
 
 
 
-
+//增加
 router.post("/", async function(req, res) {
   let {
     name,
@@ -127,7 +139,7 @@ router.post("/", async function(req, res) {
 });
 
 
-
+//修改
 router.put("/:id", async function(req, res) {
   let id = req.params.id;
   let {
@@ -166,12 +178,14 @@ router.put("/:id", async function(req, res) {
   });
   res.send({ status: 1 });
 });
+
+//删除
 router.delete("/:id", async function(req, res) {
   let id = req.params.id;
   await client.delete("/commodities/" + id);
   res.send({ status: 1 });
 });
-
+//上传
 router.post("/upload", function(req, res) {
   let form = new multiparty.Form({
     uploadDir: "./public/upload" // 指定保存上传文件的路径
